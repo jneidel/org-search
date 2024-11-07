@@ -1,8 +1,14 @@
-# React + Vite
+# Org Search
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Search for my note-taking system
 
-Currently, two official plugins are available:
+A frontend to elasticsearch, which indexes my note-taking system.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Search screen](./docs/screenshot.png)
+
+## Stack
+
+- react + tailwind for the frontend powered by vite
+- elasticsearch
+- [fscrawler](https://github.com/dadoonet/fscrawler) for indexing my file system of notes in elasticsearch
+- (kibana for managing elasticsearch)
