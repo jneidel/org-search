@@ -4,11 +4,13 @@ import Match from './Match';
 function checkIfExclude( path ) {
   return !(
     path.match("/cache/") ||
+      path.match("/.git/") ||
       path.match( /\.lock$/ ) ||
       path.match( /\.js$/ ) ||
       path.match("/css/") ||
       path.match("/html/") ||
-      path.match("/js/")
+      path.match("/js/") ||
+      path.match("/accountability buddy/")
   )
 }
 
