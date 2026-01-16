@@ -4,7 +4,7 @@ function Match({ match }) {
     // .replace(/\[(.+)]\((https?:\/\/[^\)]+\))/, "<a href='$2'>$1</a>")
 
   return (<>
-    <p className="my-1"
+    <p className={`my-1 text-my-white/80`}
       dangerouslySetInnerHTML={{ __html: htmlOutput
         .replaceAll("@@", "<span class='px-1 bg-amber-400 text-zinc-950'>")
         .replaceAll("@/@", "</span>")
