@@ -41,10 +41,9 @@ async function queryElasticSearch(searchString) {
   };
 
   // "https://es.neidel.xyz/org_ngram/_search"
-  const data = await fetch("https://es.neidel.xyz/org/_search", {
+  const ES_BASE = import.meta.env.DEV ? '/es' : 'https://es.neidel.xyz'
+  const data = await fetch(`${ES_BASE}/org/_search`, {
     method: "POST",
-    mode: "cors",
-    credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
     },
