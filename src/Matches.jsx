@@ -1,25 +1,11 @@
 import Match from "./Match";
 import Filepath from "./Filepath";
-
-function checkIfExclude( path ) {
-  return !(
-    path.match("/cache/") ||
-      path.match("/.git/") ||
-      path.match(/\.lock$/) ||
-      path.match(/\.js$/) ||
-      path.match("/css/") ||
-      path.match("/html/") ||
-      path.match("/js/") ||
-      path.match("/accountability buddy/") ||
-      path.match("/outlook emails/") ||
-      path.match("package-lock.json$")
-  );
-}
+import { shouldIncludePath } from "./excludePaths";
 
 function Matches({ file, matches, onFilterSegment, filterMode }) {
   const path = file.substring(1);
 
-  if (!checkIfExclude(path)) return null;
+  if (!shouldIncludePath(path)) return null;
 
   return (
     <>

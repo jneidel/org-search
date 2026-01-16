@@ -1,0 +1,12 @@
+[
+  "/cache/",
+  ".git/",
+  "\\.lock$",
+  "\\.js$",
+  "/css/",
+  "/html/",
+  "/js/",
+  "/accountability buddy/",
+  "/outlook emails/",
+  "package-lock.json$"
+]

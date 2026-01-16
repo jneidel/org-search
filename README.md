@@ -31,3 +31,10 @@ Because I'm not using authentication on my local network I also have:
 ```
 - xpack.security.enabled=false
 ```
+
+## Path exclusions configuration
+
+Paths that should never match can be configured in `excludePaths.config.json`.
+Each entry is a JavaScript `RegExp` pattern string compiled at runtime and
+applied to every result path. To add or remove exclusions, edit the JSON array
+and reload the app.
