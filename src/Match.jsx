@@ -6,7 +6,7 @@ function Match({ match }) {
   return (<>
     <p className={`my-1 text-my-white/80`}
       dangerouslySetInnerHTML={{ __html: htmlOutput
-        .replaceAll("@@", "<span class='px-1 bg-amber-400 text-zinc-950'>")
+        .replaceAll("@@", "<span class='underline decoration-my-yellow decoration-2 underline-offset-2'>")
         .replaceAll("@/@", "</span>")
       }}>
     </p>
