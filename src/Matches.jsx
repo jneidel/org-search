@@ -14,7 +14,7 @@ function checkIfExclude( path ) {
   );
 }
 
-function Matches({ file, matches }) {
+function Matches({ file, matches, onFilterSegment, filterMode }) {
   const path = file.substring(1);
 
   if (!checkIfExclude(path)) return null;
@@ -22,7 +22,7 @@ function Matches({ file, matches }) {
   return (
     <>
       <div className="mb-6 p-4 text-left">
-        <Filepath path={path} />
+        <Filepath path={path} onFilterSegment={onFilterSegment} filterMode={filterMode} />
 
         {matches.map((match, index) =>
            (<Match match={match} key={index} />)
