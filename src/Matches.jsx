@@ -1,41 +1,36 @@
-import Match from './Match';
-import Filepath from './Filepath';
+import Match from "./Match";
+import Filepath from "./Filepath";
 
 function checkIfExclude( path ) {
   return !(
     path.match("/cache/") ||
       path.match("/.git/") ||
-      path.match( /\.lock$/ ) ||
-      path.match( /\.js$/ ) ||
+      path.match(/\.lock$/) ||
+      path.match(/\.js$/) ||
       path.match("/css/") ||
       path.match("/html/") ||
       path.match("/js/") ||
       path.match("/accountability buddy/")
-  )
+  );
 }
 
 function Matches({ file, matches }) {
   const path = file.substring(1);
 
-  let orgSystem = "org";
-  let category = path.split("/")[0];
-  if (category === "mac_org" || category === "jobdirecto_org") {
-    orgSystem = category;
-    category = path.split("/")[1];
-  }
+  if (!checkIfExclude(path)) return null;
 
-  if ( checkIfExclude(path) ) {
-    return (<>
-      <div className='mb-6 p-4 text-left'>
-        <Filepath path={path} orgSystem={orgSystem} category={category} />
+  return (
+    <>
+      <div className="mb-6 p-4 text-left">
+        <Filepath path={path} />
 
         {matches.map((match, index) =>
            (<Match match={match} key={index} />)
         )}
       </div>
       <hr className="my-6 border-zinc-500/30" />
-    </>)
-  }
+    </>
+  );
 }
 
-export default Matches
+export default Matches;
