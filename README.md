@@ -1,19 +1,29 @@
 # Org Search
 
-> Search for my note-taking system
+> search for my note-taking system
 
-A frontend to elasticsearch, which indexes my note-taking system.
+This react app provides a way do a full-text search over my whole note-taking system instantly.
+The search is powered by an Elasticsearch that gets populated by [fscrawler](https://github.com/dadoonet/fscrawler) which ingests all of my org-mode notes, PDFs and more.
 
-![Search screen](./docs/screenshot.png)
+![Search screen with normal result](./docs/result.png)
+
+This search can be narrowed down with include and exclude filters:
+
+![Search screen with path exclusion](./docs/exclude.png)
+
+![Search screen with path inclusion](./docs/include.png)
 
 ## Stack
 
-- react + tailwind for the frontend powered by vite
-- elasticsearch
-- [fscrawler](https://github.com/dadoonet/fscrawler) for indexing my file system of notes in elasticsearch
-- (kibana for managing elasticsearch)
+- React for the UI
+- Tailwind for styling
+- Vite for keeping it all together
+- Elasticsearch as the search index
+- [fscrawler](https://github.com/dadoonet/fscrawler) for indexing my file system of notes for Elasticsearch
+- (kibana for managing Elasticsearch)
 
-## Configure elasticsearch
+## Configuration
+### Elasticsearch
 
 To setup CORS with elasticsearch I had to add this configuration to my es
 docker compose file:
@@ -32,9 +42,7 @@ Because I'm not using authentication on my local network I also have:
 - xpack.security.enabled=false
 ```
 
-## Path exclusions configuration
+### Excluded paths
 
-Paths that should never match can be configured in `excludePaths.config.json`.
-Each entry is a JavaScript `RegExp` pattern string compiled at runtime and
-applied to every result path. To add or remove exclusions, edit the JSON array
-and reload the app.
+Paths that should never be matched can be configured in `excludePaths.config.json`.
+Each entry is a JavaScript `RegExp` pattern to be excluded.
