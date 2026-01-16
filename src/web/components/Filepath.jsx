@@ -72,3 +72,4 @@ function Filepath({ path, onFilterSegment, filterMode }) {
 }
 
 export default Filepath;
+

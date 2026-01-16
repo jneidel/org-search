@@ -1,6 +1,6 @@
 import Match from "./Match";
 import Filepath from "./Filepath";
-import { shouldIncludePath } from "./excludePaths";
+import { shouldIncludePath } from "../excludePaths";
 
 function Matches({ file, matches, onFilterSegment, filterMode }) {
   const path = file.substring(1);
@@ -22,3 +22,4 @@ function Matches({ file, matches, onFilterSegment, filterMode }) {
 }
 
 export default Matches;
+

@@ -1,9 +1,9 @@
-async function queryElasticSearch(searchString) {
+function buildQueries(searchString) {
   /* Query summary:
-     - A content match is required
-     - Exact matches are boosted above prefixes
-     - Boost order (highest → lowest):
-       file.filename (exact term >> wildcard contains) > path.virtual.fulltext (phrase >> prefix) > content (phrase >> prefix)
+  - A content match is required
+  - Exact matches are boosted above prefixes
+  - Boost order (highest → lowest):
+    file.filename (exact term >> wildcard contains) > path.virtual.fulltext (phrase >> prefix) > content (phrase >> prefix)
    */
   const words = searchString.split(/\s+/).filter(Boolean);
   const primaryQuery = {
@@ -122,32 +122,54 @@ async function queryElasticSearch(searchString) {
     }
   };
 
-  const ES_BASE = import.meta.env.DEV ? "/es" : "https://es.neidel.xyz";
-  const runQuery = async q => fetch(`${ES_BASE}/org/_search`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(q),
-  }).then(res => res.json())
-    .then(data => data.hits.hits)
-    .then(hits => hits.map(hit => {
-      const contentHighlights = hit?.highlight?.content ?? [];
-      if (contentHighlights.length === 0)
-        return null;
+  return { primaryQuery, fallbackQuery };
+}
 
-      return {
-        file: hit.fields["path.virtual.fulltext"][0],
-        matches: contentHighlights
-      };
-    }).filter(Boolean))
+async function runElasticQueries({ base, searchString }) {
+  const { primaryQuery, fallbackQuery } = buildQueries(searchString);
+  
+  const runQuery = async q => fetch(`${base}/org/_search`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(q),
+  }).then(r => r.json())
+    .then(j => j?.hits?.hits || [])
     .catch(() => []);
 
-  let data = await runQuery(primaryQuery);
+  const mapHits = hits => hits.map(hit => {
+    const contentHighlights = hit?.highlight?.content || [];
+    if (contentHighlights.length === 0)
+      return null;
+    
+    return {
+      file: hit.fields["path.virtual.fulltext"][0],
+      matches: contentHighlights
+    };
+  }).filter(Boolean);
+
+  let hits = await runQuery(primaryQuery);
+  let data = mapHits(hits);
   if (!Array.isArray(data) || data.length === 0) {
-    data = await runQuery(fallbackQuery);
+    console.log("fallback");
+    hits = await runQuery(fallbackQuery);
+    data = mapHits(hits);
   }
   return data;
+}
+
+function resolveElasticsearchBase() {
+  const isNode = typeof window === "undefined";
+  if (isNode) "https://es.neidel.xyz";
+  try {
+    return import.meta.env && import.meta.env.DEV ? "/es" : "https://es.neidel.xyz";
+  } catch (_) {
+    return "https://es.neidel.xyz";
+  }
+}
+
+async function queryElasticSearch(searchString) {
+  const base = resolveElasticsearchBase();
+  return runElasticQueries({ base, searchString });
 }
 
 export default queryElasticSearch;

@@ -2,8 +2,10 @@
 
 > search for my note-taking system
 
-This react app provides a way do a full-text search over my whole note-taking system instantly.
+This app provides a way do a full-text search over my whole note-taking system instantly.
 The search is powered by an Elasticsearch that gets populated by [fscrawler](https://github.com/dadoonet/fscrawler) which ingests all of my org-mode notes, PDFs and more.
+
+By default you get serve a react app web interface:
 
 ![Search screen with normal result](./docs/result.png)
 
@@ -13,11 +15,32 @@ This search can be narrowed down with include and exclude filters:
 
 ![Search screen with path inclusion](./docs/include.png)
 
+If you pass `?format=org` and a `&query=..` you get the same output formatted in org-mode:
+
+![Output formatted as org-mode](./docs/format-org.png)
+
+If you pass `?format=ansi` and a `&query=..` you get a colorized version of the org-mode output:
+
+![Output formatted as colorized org-mode](./docs/format-ansi-detail.png)
+
+![Output formatted as colorized org-mode](./docs/format-ansi-overview.png)
+
+Write it to a file:
+```sh
+curl -Ss "http://localhost:5173/?query=query&format=ansi" >org-search.org
+```
+
+And evaluate this elisp snippet to colorize the current buffer:
+```elisp
+(require 'ansi-color)
+(ansi-color-apply-on-region (point-min) (point-max))
+```
+
 ## Stack
 
-- React for the UI
+- React for the web UI
 - Tailwind for styling
-- Vite for keeping it all together
+- Vite as the server and transpiler
 - Elasticsearch as the search index
 - [fscrawler](https://github.com/dadoonet/fscrawler) for indexing my file system of notes for Elasticsearch
 - (kibana for managing Elasticsearch)

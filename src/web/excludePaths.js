@@ -1,4 +1,4 @@
-import patterns from "../excludePaths.config.json";
+import patterns from "../../excludePaths.config.json";
 
 const regexPatterns = patterns.map((pattern) => new RegExp(pattern));
 
@@ -9,4 +9,3 @@ export function shouldIncludePath(path) {
   }
   return true;
 }
-

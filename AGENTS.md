@@ -1,8 +1,8 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- `src/` — React source (JSX). Components in `PascalCase` (e.g., `Matches.jsx`, `Filepath.jsx`).
-- `index.html` — Vite entry; mounts `src/main.jsx`.
+- `src/web/` — React source (JSX). Components in `PascalCase` (e.g., `Matches.jsx`, `Filepath.jsx`).
+- `index.html` — Vite entry; mounts `src/web/main.jsx`.
 - `public/` — Static assets served as‑is.
 - `docs/` — Project docs and screenshots.
 - `dist/` — Build output (generated).

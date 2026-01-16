@@ -1,17 +1,21 @@
-import { useState, useEffect } from 'react';
-import Matches from './Matches';
-import queryElasticSearch from './queryElasticsearch';
-import Filter from './Filter';
+import { useState, useEffect } from "react";
+import Matches from "./Matches";
+import queryElasticSearch from "../../queryElasticsearch";
+import Filter from "./Filter";
 
 function App() {
   const [searchData, setSearchData] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(new URLSearchParams(window.location.search).get('query'));
+  const params = new URLSearchParams(window.location.search);
+  const [searchQuery, setSearchQuery] = useState(params.get("query"));
 
   useEffect(() => {
-    if (searchQuery) {
-      history.pushState({ query: searchQuery }, searchQuery, "?query=" + searchQuery);
-      queryElasticSearch(searchQuery).then(data => setSearchData(data));
-    }
+    if (!searchQuery) return;
+
+    const nextParams = new URLSearchParams();
+    nextParams.set("query", searchQuery);
+    history.pushState({ query: searchQuery }, searchQuery, `?${nextParams.toString()}`);
+
+    queryElasticSearch(searchQuery).then(data => setSearchData(data));
   }, [searchQuery]);
 
   const onChange = (event) => {
@@ -55,3 +59,4 @@ function App() {
 }
 
 export default App;
+
