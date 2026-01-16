@@ -159,7 +159,7 @@ async function runElasticQueries({ base, searchString }) {
 
 function resolveElasticsearchBase() {
   const isNode = typeof window === "undefined";
-  if (isNode) "https://es.neidel.xyz";
+  if (isNode) return "https://es.neidel.xyz";
   try {
     return import.meta.env && import.meta.env.DEV ? "/es" : "https://es.neidel.xyz";
   } catch (_) {

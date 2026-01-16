@@ -40,12 +40,31 @@ And evaluate this elisp snippet to colorize the current buffer:
 
 - React for the web UI
 - Tailwind for styling
-- Vite as the server and transpiler
+- Vite as transpiler and local development server
+- Node.js as a production server
 - Elasticsearch as the search index
 - [fscrawler](https://github.com/dadoonet/fscrawler) for indexing my file system of notes for Elasticsearch
 - (kibana for managing Elasticsearch)
 
-## Configuration
+## Development
+
+To run locally:
+```sh
+make
+```
+
+To deploy I use:
+```sh
+make deploy
+```
+
+The files are synced into a docker container setup like this:
+```sh
+docker run -d --name org-search --network br0 --ip 192.168.178.33 -v /mnt/user/appdata/org-search:/app node:25-alpine sh -lc "cd /app && npm ci && PORT=80 npm start"
+```
+
+Nginx proxy manager then turns ip into a full-fledged domain with HTTPS.
+
 ### Elasticsearch
 
 To setup CORS with elasticsearch I had to add this configuration to my es

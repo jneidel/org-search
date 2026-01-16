@@ -7,11 +7,12 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "nodemon server/index.js"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "express": "^4.21.1",
+    "nodemon": "^3.1.11"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -25,6 +26,8 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.11.0",
     "postcss": "^8.4.47",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "tailwindcss": "^3.4.14",
     "vite": "^5.4.10"
   }

@@ -1,6 +1,15 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import orgTextPlugin from "./src/org-mode/orgTextPlugin.js";
+import handleTextFormats from "./server/handleTextFormats.js";
+
+function orgTextPlugin() {
+  return {
+    name: "org-text-endpoint",
+    configureServer(server) {
+      server.middlewares.use(handleTextFormats)
+    },
+  };
+}
 
 export default defineConfig({
   plugins: [
