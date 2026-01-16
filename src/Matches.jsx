@@ -10,7 +10,9 @@ function checkIfExclude( path ) {
       path.match("/css/") ||
       path.match("/html/") ||
       path.match("/js/") ||
-      path.match("/accountability buddy/")
+      path.match("/accountability buddy/") ||
+      path.match("/outlook emails/") ||
+      path.match("package-lock.json$")
   );
 }
 
