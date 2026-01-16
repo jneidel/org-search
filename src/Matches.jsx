@@ -26,13 +26,14 @@ function Matches({ file, matches }) {
 
   if ( checkIfExclude(path) ) {
     return (<>
-      <div className='border-solid border-red-800 border-2 mb-6 p-4 rounded'>
+      <div className='mb-6 p-4'>
         <Filepath path={path} category={category} />
 
         {matches.map((match, index) => {
           return (<Match match={match} key={index} />)
         })}
       </div>
+      <hr className="my-6 border-zinc-500/30" />
     </>)
   }
 }
