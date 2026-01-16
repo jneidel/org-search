@@ -40,6 +40,7 @@ async function queryElasticSearch(searchString) {
     }
   };
 
+  // "https://es.neidel.xyz/org_ngram/_search"
   const data = await fetch("https://es.neidel.xyz/org/_search", {
     method: "POST",
     mode: "cors",
