@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Matches from "./Matches";
-import queryElasticSearch from "../../queryElasticsearch";
+import queryElasticSearch, { queryLastChangedFile } from "../../queryElasticsearch";
 import Filter from "./Filter";
 
 function App() {
@@ -22,9 +22,21 @@ function App() {
     setSearchQuery(event.target.value);
   };
 
+  const [lastChanged, setLastChanged] = useState(null);
+  useEffect(() => {
+    queryLastChangedFile().then(file => setLastChanged(file));
+  }, []);
+
   return (
     <>
       <h1>Org Search</h1>
+
+      {lastChanged && lastChanged.filename && lastChanged.minutesAgo && (
+        <div className="text-xs text-gray-400 mt-4 mb-1">
+          {`Most recent change: "${lastChanged.filename}" ${lastChanged.minutesAgo}`}
+        </div>
+      )}
+
       <input
         autoFocus
         value={searchQuery}
@@ -33,6 +45,7 @@ function App() {
         className="m-4 p-2 text-xl"
         tabIndex="1"
       />
+
       <Filter data={searchData}>
         {({ filteredData, onFilterSegment, filterMode }) => (
           <>
@@ -59,4 +72,3 @@ function App() {
 }
 
 export default App;
-

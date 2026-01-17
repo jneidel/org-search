@@ -1,3 +1,5 @@
+import { queryLastChangedFile } from "../../queryElasticsearch.js";
+
 const localFileRoot = (typeof process !== 'undefined' && process.env.LOCAL_FILE_ROOT)
   || import.meta.env.LOCAL_FILE_ROOT;
 
@@ -50,10 +52,27 @@ export const labelWithoutExtension = p => {
   return [...parts, withoutExt].join("/");
 };
 
-export function formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights }) {
+async function fetchRecentChange() {
+  try {
+    const { filename, minutesAgo } = await queryLastChangedFile();
+    if (!filename || !minutesAgo)
+      return null;
+
+    return `~Most recent change: "${filename}" ${minutesAgo}~`;
+  } catch {
+    return null;
+  }
+}
+
+export async function formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights }) {
   const output = [];
+
   if (query)
     output.push(`* Results for "${query}"`);
+
+  const recentChange = await fetchRecentChange();
+  if (recentChange)
+    output.push(recentChange);
 
   results
     .filter(({ file }) => !!shouldIncludePath ? shouldIncludePath(file) : true)

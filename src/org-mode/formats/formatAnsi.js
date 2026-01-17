@@ -52,8 +52,8 @@ function formatHeadline(relativeFilename) {
   return colorizeHeadline(relativeFilename);
 }
 
-function formatAnsi({ results, query, shouldIncludePath }) {
-  return formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights: toAnsiHighlight });
+async function formatAnsi({ results, query, shouldIncludePath }) {
+  return await formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights: toAnsiHighlight });
 }
 
 export default formatAnsi;

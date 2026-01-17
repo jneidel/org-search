@@ -32,11 +32,7 @@ async function handleTextFormats(req, res, next) {
     }
 
     const formatFunc = wantsAnsi ? formatAnsi : formatOrg;
-    const responseText = formatFunc({
-      results,
-      query,
-      shouldIncludePath
-    });
+    const responseText = await formatFunc({ results, query, shouldIncludePath });
     res.end(responseText);
   } catch (err) {
     res.statusCode = 500;

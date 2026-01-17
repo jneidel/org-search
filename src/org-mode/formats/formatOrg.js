@@ -6,8 +6,8 @@ function formatHeadline(relativeFilename) {
   return labelWithoutExtension(relativeFilename);
 }
 
-function formatOrg({ results, query, shouldIncludePath }) {
-  return formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights: toOrgHighlight });
+async function formatOrg({ results, query, shouldIncludePath }) {
+  return await formatOutput({ results, query, shouldIncludePath, formatHeadline, transformContentHighlights: toOrgHighlight });
 }
 
 export default formatOrg;

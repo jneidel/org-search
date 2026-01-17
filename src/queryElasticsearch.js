@@ -141,18 +141,21 @@ function resolveElasticsearchIndex() {
     || import.meta.env.ES_INDEX;
 }
 
-async function queryElasticSearch(searchString) {
+async function runQuery(query) {
   const esHost = resolveElasticsearchHost();
   const esIndex = resolveElasticsearchIndex();
-  const { primaryQuery, fallbackQuery } = buildQueries(searchString);
 
-  const runQuery = async q => fetch(`${esHost}/${esIndex}/_search`, {
+  return fetch(`${esHost}/${esIndex}/_search`, {
+    body: JSON.stringify(query),
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(q),
   }).then(r => r.json())
     .then(j => j?.hits?.hits || [])
     .catch(() => []);
+}
+
+async function queryElasticSearch(searchString) {
+  const { primaryQuery, fallbackQuery } = buildQueries(searchString);
 
   const mapHits = hits => hits.map(hit => {
     const contentHighlights = hit?.highlight?.content || [];
@@ -173,6 +176,37 @@ async function queryElasticSearch(searchString) {
     data = mapHits(hits);
   }
   return data;
+}
+
+export async function queryLastChangedFile() {
+  const query = {
+    size: 1,
+    sort: [
+      { "file.indexing_date": { order: "desc" } }
+    ],
+    _source: [
+      "file.filename",
+      "file.indexing_date"
+    ]
+  };
+
+  return runQuery(query)
+    .then(hits => hits[0]?._source?.file)
+    .then(({ filename, indexing_date }) => {
+      const date = new Date(indexing_date);
+      const secondsElapsed = Date.now() - date.getTime();
+
+      if (secondsElapsed > 45*60*1000) { // 45 min
+        return {};
+      } else {
+        const minutesAgo = Math.floor(secondsElapsed/60/1000) + " min ago";
+
+        return {
+          filename,
+          minutesAgo
+        };
+      }
+    });
 }
 
 export default queryElasticSearch;
