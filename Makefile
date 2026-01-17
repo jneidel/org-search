@@ -10,5 +10,8 @@ node_modules:
 dist: index.html src
 	npm run build
 
+server: dist node_modules
+	npm run start
+
 deploy: dist
-	rsync -av dist server src package.json package-lock.json excludePaths.config.json home:appdata/org-search/
+	rsync -av dist server src package.json package-lock.json excludePaths.config.json .env home:appdata/org-search/

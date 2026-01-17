@@ -1,3 +1,6 @@
+const localFileRoot = (typeof process !== 'undefined' && process.env.LOCAL_FILE_ROOT)
+  || import.meta.env.LOCAL_FILE_ROOT;
+
 export const toRelativePath = p => (typeof p === "string" && p.startsWith("/")) ? p.slice(1) : p;
 
 export const sanitizeHeadingsToEmphasis = s => s
@@ -56,7 +59,7 @@ export function formatOutput({ results, query, shouldIncludePath, formatHeadline
     .filter(({ file }) => !!shouldIncludePath ? shouldIncludePath(file) : true)
     .forEach(({ file, matches }) => {
       const relativePath = toRelativePath(file);
-      const headline = `** [[file:/home/jneidel/org/${relativePath}][${formatHeadline(relativePath)}]]`;
+      const headline = `** [[file:${localFileRoot}/${relativePath}][${formatHeadline(relativePath)}]]`;
       output.push(headline);
 
       const language = srcLanguageForPath(file);

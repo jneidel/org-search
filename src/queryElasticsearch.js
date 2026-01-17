@@ -125,10 +125,28 @@ function buildQueries(searchString) {
   return { primaryQuery, fallbackQuery };
 }
 
-async function runElasticQueries({ base, searchString }) {
+function resolveElasticsearchHost() {
+  const isNode = typeof window === "undefined";
+  if (isNode) {
+    return (process.env.ES_HOST);
+  }
+  if (import.meta.env && import.meta.env.DEV) {
+    return "/es";
+  }
+
+  return (import.meta.env && import.meta.env.ES_HOST);
+}
+function resolveElasticsearchIndex() {
+  return (typeof process !== 'undefined' && process.env?.ES_INDEX)
+    || import.meta.env.ES_INDEX;
+}
+
+async function queryElasticSearch(searchString) {
+  const esHost = resolveElasticsearchHost();
+  const esIndex = resolveElasticsearchIndex();
   const { primaryQuery, fallbackQuery } = buildQueries(searchString);
-  
-  const runQuery = async q => fetch(`${base}/org/_search`, {
+
+  const runQuery = async q => fetch(`${esHost}/${esIndex}/_search`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(q),
@@ -155,21 +173,6 @@ async function runElasticQueries({ base, searchString }) {
     data = mapHits(hits);
   }
   return data;
-}
-
-function resolveElasticsearchBase() {
-  const isNode = typeof window === "undefined";
-  if (isNode) return "https://es.neidel.xyz";
-  try {
-    return import.meta.env && import.meta.env.DEV ? "/es" : "https://es.neidel.xyz";
-  } catch (_) {
-    return "https://es.neidel.xyz";
-  }
-}
-
-async function queryElasticSearch(searchString) {
-  const base = resolveElasticsearchBase();
-  return runElasticQueries({ base, searchString });
 }
 
 export default queryElasticSearch;

@@ -1,14 +1,17 @@
 import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import handleTextFormats from "./handleTextFormats.js";
+import dotenv from "dotenv";
+
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+dotenv.config({ path: path.join(projectRoot, ".env") });
+const { default: handleTextFormats } = await import("./handleTextFormats.js"); // depends on env vars
 
 const app = express();
 
 app.get("/", handleTextFormats);
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distDir = path.resolve(__dirname, "..", "dist");
+const distDir = path.resolve(projectRoot, "dist");
 app.use(express.static(distDir));
 app.get("/", (_, res) => { // react web app
   res.sendFile(path.join(distDir, "index.html"));
